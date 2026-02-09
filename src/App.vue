@@ -5,8 +5,6 @@ import { format, differenceInMinutes, parse } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { toast } from 'vue3-toastify';
 
-const firebaseApiKey = 'AIzaSyAfJaklNBT7hawrBXVcV-YnGUcACfAwh64'
-
 const isLoading = ref(false);
 const searchType = ref('identifier'); // 'identifier' | 'plate'
 
