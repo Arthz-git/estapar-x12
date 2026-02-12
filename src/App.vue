@@ -82,18 +82,22 @@ const calcularTarifa = (entrada, saida, tipo) => {
 		return 0
 	}
 	else if (diffMinutes <= 60) {
-		return tipo.toLowerCase() === 'carro' ? 23 : 5
+		return params.inicial
 	}
 	else {
-		const diasCheio = parseInt(diffMinutes / (24 * 60))
+		const diffMinutesAdaptado = diffMinutes - 60
+
+		const diasCheio = parseInt(diffMinutesAdaptado / (24 * 60))
 		const valorDiasCheio = diasCheio * params.total
 
-		const quinzenasFaltantes = parseInt((diffMinutes % (24 * 60) / 15))
+		const quinzenasFaltantes = parseInt((diffMinutesAdaptado % (24 * 60) / 15))
 		const valorParcial = quinzenasFaltantes * params.quinzena
 
-		const valorTotal = valorDiasCheio + (valorParcial > 70 ? 70 : valorParcial)
+		const valorParcialAdaptado = valorParcial > params.total ? params.total : valorParcial
 
-		return valorTotal
+		const valorTotal = valorDiasCheio + valorParcialAdaptado
+
+		return valorTotal + params.inicial + params.quinzena
 	}
 }
 
