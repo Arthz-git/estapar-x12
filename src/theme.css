@@ -51,5 +51,16 @@
 		/* Typography */
 		--font-heading: 'Ubuntu', sans-serif;
 		--font-body: 'Ubuntu', sans-serif;
+
+		/* Toastify Overrides */
+		--toastify-color-dark: rgb(var(--color-secondary-900));
+		--toastify-toast-background: rgb(var(--color-secondary-900));
+		--toastify-text-color-dark: rgb(var(--color-secondary-50));
+		--toastify-color-success: rgb(var(--color-accent-600));
+		--toastify-icon-color-success: rgb(var(--color-accent-500));
+		--toastify-color-progress-success: rgb(var(--color-accent-500));
+		--toastify-color-error: rgb(239 68 68); /* red-500 */
+		--toastify-icon-color-error: rgb(239 68 68);
+		--toastify-color-progress-error: rgb(239 68 68);
 	}
 }
