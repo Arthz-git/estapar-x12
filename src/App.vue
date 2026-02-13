@@ -40,7 +40,7 @@ const paramsTarifa = {
 }
 
 const searchForm = reactive({
-	identifier: '',
+	identifier: '86837466',
 	plate: ''
 });
 
@@ -72,32 +72,39 @@ const getAllRegistros = async () => {
 }
 
 const calcularTarifa = (entrada, saida, tipo) => {
-	const start = parse(entrada, 'dd/MM/yyyy HH:mm:ss', new Date(), { locale: ptBR });
-	const end = parse(saida, 'dd/MM/yyyy HH:mm:ss', new Date(), { locale: ptBR });
-	const diffMinutes = differenceInMinutes(end, start);
+	const start = parse(entrada, 'dd/MM/yyyy HH:mm:ss', new Date(), { locale: ptBR })
+	const end = parse(saida, 'dd/MM/yyyy HH:mm:ss', new Date(), { locale: ptBR })
+	const diffMinutesTotal = differenceInMinutes(end, start)
 
 	const params = paramsTarifa[tipo.toLowerCase()]
 
-	if (diffMinutes <= 10) {
+	if (diffMinutesTotal <= 10) {
 		return 0
 	}
-	else if (diffMinutes <= 60) {
+	else if (diffMinutesTotal <= 60) {
 		return params.inicial
 	}
 	else {
-		const diffMinutesAdaptado = diffMinutes - 60
+		const diffMinutes = diffMinutesTotal - 60
+		const minutosDia = 1440 // quantidade de minutos num dia
 
-		const diasCheio = parseInt(diffMinutesAdaptado / (24 * 60))
+		let valorTotal = diffMinutesTotal >= minutosDia ? 0 : params.inicial
+
+		const diasCheio = Math.floor(diffMinutes / minutosDia)
 		const valorDiasCheio = diasCheio * params.total
+		valorTotal += valorDiasCheio
 
-		const quinzenasFaltantes = parseInt((diffMinutesAdaptado % (24 * 60) / 15))
-		const valorParcial = quinzenasFaltantes * params.quinzena
+		const minutosFaltantes = Math.floor(diffMinutes % minutosDia)
+		const intervalosFaltantes = Math.floor(minutosFaltantes / 15) // intervalos de 15 minutos
+		const valorIntervalos = intervalosFaltantes * params.quinzena
 
-		const valorParcialAdaptado = valorParcial > params.total ? params.total : valorParcial
+		const restoIntervalosFaltantes = minutosFaltantes % 15
+		valorTotal += restoIntervalosFaltantes > 0 ? params.quinzena : 0
 
-		const valorTotal = valorDiasCheio + valorParcialAdaptado
+		const valorParcial = Math.min(valorIntervalos, 70)
+		valorTotal += valorParcial
 
-		return valorTotal + params.inicial + params.quinzena
+		return valorTotal
 	}
 }
 
