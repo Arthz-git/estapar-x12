@@ -40,7 +40,7 @@ const paramsTarifa = {
 }
 
 const searchForm = reactive({
-	identifier: '86837466',
+	identifier: '',
 	plate: ''
 });
 
